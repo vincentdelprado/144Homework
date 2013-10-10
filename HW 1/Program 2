@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+
+#This is a PigLatin Generator.
+
+__author__= 'scweiser'
+__email__='scweiser@ucsc.edu'
+__credits__='Partner = Vince Del Prado: vdelprad@ucsc.edu'
+
+vowels=['a','e','i','o','u']
+numbers=['0','1','2','3','4','5','6','7','8','9']
+    # a list of test word -> pg examples, as a dict
+
+wordsToPigLatin = {"artichoke": ("artichokyay", "yay"),
+                       "stipple": ("ipplestay", "way"),
+                       "123re": ("123re", "ay"),
+                       "soup": ("oupsay", "way")}
+
+def pigLatinGen(engword,dialect):
+    """
+    this function handles pigLatin for word engword
+
+    Args:
+		engword: a word
+
+    Returns:
+        pigLatined: a PigLatin representation of word engword
+
+    Raises:
+        Nothing
+    """
+    if engword[0] in vowels: #this loop is for words that start in a vowel
+        if engword[-1] in vowels:
+            return engword[:-1]+dialect #if the word starts and ends with a vowel, this returns the word without the final vowel + 'yay' or 'way', depending on the given dialect.
+        else:
+            return engword+dialect #if the word starts with a vowel and does not end with a vowel, this returns the word + 'yay' or 'way', depending on the given dialect.
+
+
+    elif engword[0] in numbers: #if the word begins with a number, return the original word
+        return engword
+
+    else: #this is for words that start with a consonant
+        for i in range (0,len(engword)):
+            if engword[i] not in vowels:
+                continue  #this skips all non-vowels
+            else:
+                onset = engword[0:i]
+                rest = engword[i:]
+                return rest+onset+'ay' #this stops on the first vowel and splits the word into onset and rest
+
+if __name__ == "__main__":
+
+    # per word, get the pg, the expected answer, and print success
+    for word in wordsToPigLatin:
+        ans, dialect = wordsToPigLatin[word]
+        pg = pigLatinGen(word, dialect)
+        if pg == ans:
+            result = "PASS"
+        else:
+            result = "FAIL"
+        print word, pg, result
